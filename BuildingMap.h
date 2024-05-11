@@ -4,6 +4,7 @@
 
 #ifndef BUILDING_MAP_H
 #define BUILDING_MAP_H
+#include <iostream>
 
 class BuildingMap {
 public:
