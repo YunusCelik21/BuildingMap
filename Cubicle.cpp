@@ -109,6 +109,10 @@ string CubicleGraph::getAllNodesWithAdjacentCubicles() const {
 	return s;
 }
 
+CubicleNode* CubicleGraph::getList(int row, int column) const {
+	nodes[row * columns + column]->next;
+}
+
 // does not delete objects
 CubicleNode::~CubicleNode() {
 	if (next)

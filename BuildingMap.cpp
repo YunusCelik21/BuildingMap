@@ -6,8 +6,6 @@
 
 BuildingMap::BuildingMap(const string buildingMapFile) {
 	ifstream file(buildingMapFile);
-	int rows;
-	int columns;
 
 	file >> rows;
 	file >> columns;
@@ -21,31 +19,13 @@ BuildingMap::BuildingMap(const string buildingMapFile) {
 
 			int num = ((int)line[j]) - 48;
 
-			switch (num) {
-			case 0:
-				if (j > 0) {
-					graph.addEdge(i, j, i, j - 1); // add left cubicle as adjacent
-					graph.addEdge(i, j - 1, i, j);
-				}
-				if (i < rows - 1) {
-					graph.addEdge(i, j, i + 1, j); // add bottom
-					graph.addEdge(i + 1, j, i, j);
-				}
-				break;
-			case 1:
-				if (i < rows - 1) {
-					graph.addEdge(i, j, i + 1, j);
-					graph.addEdge(i + 1, j, i, j);
-				}
-				break;
-			case 2:
-				if (j > 0) {
-					graph.addEdge(i, j, i, j - 1);
-					graph.addEdge(i, j - 1, i, j);
-				}
-				break;
-			default:
-				break;
+			if ((num == 0 || num == 1) && (i < rows - 1)) {
+				graph.addEdge(i, j, i + 1, j); // add bottom cubicle as adjacent
+				graph.addEdge(i + 1, j, i, j);
+			}
+			if ((num == 0 || num == 2) && (j > 0)) {
+				graph.addEdge(i, j, i, j - 1); // add left cubicle as adjacent
+				graph.addEdge(i, j - 1, i, j);
 			}
 		}
 	}
@@ -71,6 +51,34 @@ void BuildingMap::displayBuildingMap() const {
 }
 
 void BuildingMap::findPaths(const int startRow, const int startCol, const int endRow, const int endCol) {
+	bool** visited = new bool*[rows];
+
+	for (int i = 0; i < columns; ++i) {
+		visited[i] = new bool[1];
+	}
+
+	for (int i = 0; i < rows; ++i) {
+		for (int j = 0; j < columns; ++j)
+			visited[i][j] = false;
+	}
+
+	Stack stack;
+	stack.push(Cubicle(startRow, startCol));
+
+	while (!stack.isEmpty()) {
+		Cubicle* cubicle = stack.top(); stack.pop();
+
+		visited[cubicle.getRow()][cubicle.getColumn()] = true;
+
+		CubicleNode* head = graph.getList(cubicle.getRow(), cubicle.getColumn());
+
+		while (head) {
+			if (!visited[(head->cubicle).getRow()][(head->cubicle).getColumn()]) {
+				stack.push(Cubicle((head->cubicle).getRow(), (head->cubicle).getColumn()));
+				head = head->next;
+			}
+		}
+	}
 }
 
 void BuildingMap::findPaths(const int startRow, const int startCol, const int endRow, const int endCol, const int avoidRow, const int avoidCol) {

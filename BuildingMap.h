@@ -4,14 +4,15 @@
 
 #ifndef BUILDING_MAP_H
 #define BUILDING_MAP_H
-#include "Cubicle.h"
+#include "Stack.h"
 #include <fstream>
 
 class BuildingMap {
 // change to private LATER !!!
 public:
+	int rows, columns;
 	CubicleGraph graph;
-
+	
 public:
 	BuildingMap(const string buildingMapFile);
 	~BuildingMap();

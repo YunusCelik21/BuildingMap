@@ -4,6 +4,30 @@
 
 #ifndef STACK_H
 #define STACK_H
+#include "Cubicle.h"
 
+struct Node {
+	Cubicle cubicle;
+	Node* next;
+
+	Node(Cubicle cubicle);
+	Node(Cubicle cubicle, Node* next);
+	~Node();
+
+};
+
+class Stack {
+private:
+	Node* head;
+
+public:
+	Stack();
+	~Stack();
+
+	bool isEmpty() const;
+	void push(const Cubicle& cubicle);
+	bool pop();
+	Cubicle* top() const;
+};
 
 #endif

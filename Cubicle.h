@@ -55,6 +55,7 @@ public:
 	string getAdjacentCubicles(int row, int column) const;
 	string getAllNodes() const;
 	string getAllNodesWithAdjacentCubicles() const;
+	CubicleNode* getList(int row, int column) const;
 };
 
 // node functions
