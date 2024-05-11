@@ -4,38 +4,61 @@
 
 #ifndef CUBICLE_H
 #define CUBICLE_H
-
-// Adjacency list class
-
-class CubicleList {
-public:
-	Cubicle* cubicle;
-	CubicleList* next;
-
-	CubicleList(Cubicle* cubicle);
-	CubicleList(Cubicle* cubicle, CubicleList* next);
-	~CubicleList();
-};
+#include <iostream>
+#include <string>
+#define print(x) cout << x << endl
+using namespace std;
 
 // cubicle class
 
 class Cubicle {
 private:
-	CubicleList* head;
 	int row, column;
 
 public:
+	Cubicle();
 	Cubicle(int row, int column);
 	~Cubicle();
 
-	CubicleList* getList() const;
 	int getRow() const;
 	int getColumn() const;
+	string getCoordinates() const;
 };
 
-// list functions
+// node class
 
-void addCubicle(CubicleList*& list, int row, int column);
-void addCubicle(CubicleList*& list, Cubicle* cubicle);
-Cubicle* getCubicle(CubicleList* list, int row, int column);
+class CubicleNode {
+public:
+	Cubicle cubicle;
+	CubicleNode* next;
+
+	CubicleNode(int row, int column);
+	CubicleNode(int row, int column, CubicleNode* next);
+	~CubicleNode();
+};
+
+// cubicle graph class
+
+class CubicleGraph {
+private:
+	int rows;
+	int columns;
+	CubicleNode** nodes;
+
+public:
+	CubicleGraph();
+	CubicleGraph(int row, int column);
+	~CubicleGraph();
+
+	CubicleNode** getNodes();
+	void addEdge(int row, int column, int addedEdgeRow, int addedEdgeColumn);
+	string getAdjacentCubicles(int row, int column) const;
+	string getAllNodes() const;
+	string getAllNodesWithAdjacentCubicles() const;
+};
+
+// node functions
+
+void addCubicle(CubicleNode*& list, int row, int column);
+Cubicle getCubicle(CubicleNode* list, int row, int column);
 #endif
