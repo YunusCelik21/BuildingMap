@@ -13,7 +13,6 @@ struct Node {
 	Node(Cubicle cubicle);
 	Node(Cubicle cubicle, Node* next);
 	~Node();
-
 };
 
 class Stack {
@@ -27,7 +26,8 @@ public:
 	bool isEmpty() const;
 	void push(const Cubicle& cubicle);
 	bool pop();
-	Cubicle* top() const;
+	Cubicle top() const;
+	string getCurrentPath();
 };
 
 #endif

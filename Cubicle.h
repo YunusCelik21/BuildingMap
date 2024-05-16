@@ -23,6 +23,7 @@ public:
 	int getRow() const;
 	int getColumn() const;
 	string getCoordinates() const;
+	bool operator==(const Cubicle& cubicle);
 };
 
 // node class
@@ -61,5 +62,4 @@ public:
 // node functions
 
 void addCubicle(CubicleNode*& list, int row, int column);
-Cubicle getCubicle(CubicleNode* list, int row, int column);
 #endif

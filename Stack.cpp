@@ -1,8 +1,15 @@
+// Name: Yunus Dildar Celik
+// Section: 1
+// ID No: 22203347
+
 #include "Stack.h"
 
 Stack::Stack() : head(nullptr) {}
 
 Stack::~Stack() {
+	if (head) {
+		delete head;
+	}
 }
 
 bool Stack::isEmpty() const {
@@ -30,7 +37,7 @@ bool Stack::pop() {
 	}
 
 	if (head->next == nullptr) {
-		delete head->next;
+		delete head;
 		head = nullptr;
 		return true;
 	}
@@ -46,9 +53,9 @@ bool Stack::pop() {
 	return true;
 }
 
-Cubicle* Stack::top() const {
-	if (!head) {
-		return nullptr;
+Cubicle Stack::top() const {
+	if (isEmpty()) {
+		return Cubicle(-1, -1);
 	}
 
 	Node* node = head;
@@ -57,7 +64,29 @@ Cubicle* Stack::top() const {
 		node = node->next;
 	}
 
-	return &(node->cubicle);
+	return node->cubicle;
+}
+
+string Stack::getCurrentPath() {
+	if (isEmpty()) {
+		return "";
+	}
+
+	Stack reversedStack;
+	string path = "";
+
+	while (!isEmpty()) {
+		reversedStack.push(this->top());
+		this->pop();
+	}
+
+	while (!reversedStack.isEmpty()) {
+		path += reversedStack.top().getCoordinates() + " -> ";
+		this->push(reversedStack.top());
+		reversedStack.pop();
+	}
+
+	return path.substr(0, path.length() - 4);
 }
 
 Node::Node(Cubicle cubicle) : cubicle(cubicle), next(nullptr) {}
@@ -65,6 +94,7 @@ Node::Node(Cubicle cubicle) : cubicle(cubicle), next(nullptr) {}
 Node::Node(Cubicle cubicle, Node* next) : cubicle(cubicle), next(nullptr) {}
 
 Node::~Node() {
-	if (next)
+	if (next) {
 		delete next;
+	}
 }

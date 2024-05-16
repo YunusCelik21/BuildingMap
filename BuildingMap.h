@@ -8,11 +8,11 @@
 #include <fstream>
 
 class BuildingMap {
-// change to private LATER !!!
 public:
 	int rows, columns;
-	CubicleGraph graph;
-	
+	CubicleGraph* graph;
+	int** visitedAdjacentCount;
+
 public:
 	BuildingMap(const string buildingMapFile);
 	~BuildingMap();
@@ -21,6 +21,8 @@ public:
 	void displayBuildingMap() const;
 	void findPaths(const int startRow, const int startCol, const int endRow, const int endCol);
 	void findPaths(const int startRow, const int startCol, const int endRow, const int endCol, const int avoidRow, const int avoidCol);
+	Cubicle getNextUnvisited(int row, int column);
+	void clearNextUnvisited();
 };
 
 #endif

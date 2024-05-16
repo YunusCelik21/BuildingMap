@@ -24,16 +24,25 @@ string Cubicle::getCoordinates() const {
 	return "(" + to_string(row) + "," + to_string(column) + ")";
 }
 
+bool Cubicle::operator==(const Cubicle& cubicle) {
+	return this->row == cubicle.row && this->column == cubicle.column;
+}
+
 //  node class
 
 CubicleNode::CubicleNode(int row, int column) : cubicle(Cubicle(row, column)), next(nullptr) {}
 
 CubicleNode::CubicleNode(int row, int column, CubicleNode* next) : cubicle(Cubicle(row, column)), next(next) {}
 
+CubicleNode::~CubicleNode() {
+	if (next) {
+		delete next;
+	}
+}
+
 // cubicle graph class
 
-CubicleGraph::CubicleGraph() : rows(0), columns(0), nodes(nullptr) {
-}
+CubicleGraph::CubicleGraph() : rows(0), columns(0), nodes(nullptr) {}
 
 CubicleGraph::CubicleGraph(int rows, int columns) : rows(rows), columns(columns) {
 	
@@ -48,7 +57,13 @@ CubicleGraph::CubicleGraph(int rows, int columns) : rows(rows), columns(columns)
 
 CubicleGraph::~CubicleGraph() {
 	if (nodes) {
+		for (int i = 0; i < rows; ++i) {
+			for (int j = 0; j < columns; ++j) {
+				delete nodes[i * columns + j];
+			}
+		}
 
+		delete[] nodes;
 	}
 }
 
@@ -64,8 +79,9 @@ string CubicleGraph::getAdjacentCubicles(int row, int column) const {
 	CubicleNode* head = nodes[row * columns + column];
 	string s = (head->cubicle).getCoordinates() + " -> ";
 
-	if (head->next == nullptr)
+	if (head->next == nullptr) {
 		return s;
+	}
 
 	while (head->next) {
 		s += (head->next->cubicle).getCoordinates() + ",";
@@ -86,8 +102,7 @@ string CubicleGraph::getAllNodes() const {
 
 		if (i < rows - 1) {
 			s += "\n";
-		}
-			
+		}			
 	}
 
 	return s;
@@ -110,13 +125,7 @@ string CubicleGraph::getAllNodesWithAdjacentCubicles() const {
 }
 
 CubicleNode* CubicleGraph::getList(int row, int column) const {
-	nodes[row * columns + column]->next;
-}
-
-// does not delete objects
-CubicleNode::~CubicleNode() {
-	if (next)
-		delete next;
+	return nodes[row * columns + column]->next;
 }
 
 // node functions
@@ -130,13 +139,4 @@ void addCubicle(CubicleNode*& list, int row, int column) {
 	else {
 		addCubicle(list->next, row, column);
 	}
-}
-
-
-Cubicle getCubicle(CubicleNode* list, int row, int column) {
-	if ((list->cubicle).getRow() == row && (list->cubicle).getColumn() == column) {
-		return list->cubicle;
-	}
-	
-	return getCubicle(list->next, row, column);		
 }
